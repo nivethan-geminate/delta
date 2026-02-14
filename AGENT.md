@@ -14,8 +14,12 @@ This document provides guidelines for the entire team (Product Manager, Business
 - [Engineering Standards](#engineering-standards)
   - [Dependency Management](#dependency-management)
   - [CI/CD Best Practices](#cicd-best-practices)
+  - [Git & Version Control Conventions](#git--version-control-conventions)
   - [Security Considerations and Error Handling](#security-considerations-and-error-handling)
   - [Security Guardrails](#security-guardrails)
+  - [Database & Data Management](#database--data-management)
+- [Incident Response & Escalation](#incident-response--escalation)
+- [Compliance & Regulatory](#compliance--regulatory)
 - [Product Manager (PM) Instructions](#product-manager-pm-instructions)
   - [Responsibilities](#responsibilities)
   - [AI-Assisted Tasks](#ai-assisted-tasks)
@@ -101,6 +105,21 @@ This document provides guidelines for the entire team (Product Manager, Business
 - Implement rollback strategies in case deployment introduces issues
 - Keep environments consistent across development, staging, and production
 
+### Git & Version Control Conventions
+
+- Use a consistent branching strategy (e.g., GitFlow or trunk-based development) agreed upon by the team
+- Write meaningful commit messages following Conventional Commits format (e.g., `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`)
+- Keep commits small and atomic — each commit should represent a single logical change
+- Use Pull Requests (PRs) / Merge Requests (MRs) for all changes — no direct pushes to main/production branches
+- Require at least one peer review approval before merging
+- Define a PR template that includes: description, testing steps, screenshots (if UI), and checklist
+- Use squash merging or rebase to keep commit history clean and readable
+- Tag releases with semantic versioning (e.g., `v1.2.0`)
+- Protect main/production branches with branch protection rules (require reviews, passing CI, no force pushes)
+- Set a maximum PR review turnaround time (e.g., 24 hours) to avoid bottlenecks
+- Resolve merge conflicts locally before pushing — never resolve directly in the remote UI for complex conflicts
+- Use `.gitignore` to exclude build artifacts, IDE configs, and environment files from the repository
+
 ### Security Considerations and Error Handling
 
 - Sanitize user inputs
@@ -118,6 +137,105 @@ This document provides guidelines for the entire team (Product Manager, Business
 - Store secrets, keys, and configuration variables in env files and they must not exist in source code.
 - Authorization must be checked at service level
 - File uploads must validate file type, size, and extension
+
+### Database & Data Management
+
+- Use a migration tool (e.g., Flyway, Liquibase, Alembic, Knex migrations) for all schema changes — never modify schemas manually in any environment
+- Follow consistent naming conventions for tables, columns, indexes, and constraints (e.g., snake_case, singular table names)
+- Define and enforce indexing guidelines — index frequently queried columns; avoid over-indexing write-heavy tables
+- Set query performance expectations (e.g., API-serving queries should complete within 100ms) and profile slow queries regularly
+- Implement connection pooling to manage database connections efficiently
+- Use parameterized queries or ORM-provided methods — never concatenate user input into SQL strings
+- Define data retention and archival policies — remove or archive stale data on a schedule
+- Implement and regularly test backup and restoration procedures; document Recovery Point Objective (RPO) and Recovery Time Objective (RTO)
+- Use read replicas or caching layers for read-heavy workloads to reduce primary database load
+- Keep referential integrity enforced at the database level via foreign keys and constraints
+- Document the data model (ERD or data dictionary) and keep it updated with every schema change
+- Separate transactional (OLTP) and analytical (OLAP) workloads where applicable
+
+---
+
+## Incident Response & Escalation
+
+### Severity Definitions
+
+| Severity | Description | Response Time | Examples |
+|----------|-------------|---------------|----------|
+| P0 — Critical | Complete system outage or data breach affecting all users | Immediate (< 15 min) | Production down, security breach, data loss |
+| P1 — High | Major feature broken, significant user impact | < 1 hour | Payment processing failure, authentication broken |
+| P2 — Medium | Feature degraded, workaround available | < 4 hours | Slow performance, non-critical feature broken |
+| P3 — Low | Minor issue, minimal user impact | Next business day | UI glitch, cosmetic issue, minor bug |
+
+### Escalation Process
+
+- **Detection**: Automated alerts (monitoring/APM) or user-reported issues trigger the process
+- **Triage**: On-call engineer assesses severity and assigns the appropriate level
+- **Communication**: Notify the relevant channel (e.g., Slack #incidents) with severity, impact summary, and owner
+- **Escalation Path**: If unresolved within the response time, escalate to team lead → engineering manager → VP of Engineering
+- **Resolution**: Apply fix or mitigation, verify in production, confirm with affected users/stakeholders
+- **Post-mortem**: Conduct a blameless post-mortem within 48 hours for all P0/P1 incidents
+
+### Post-mortem Template
+
+- **Incident Summary**: What happened and when
+- **Timeline**: Chronological sequence of events from detection to resolution
+- **Root Cause**: The underlying cause (not just symptoms)
+- **Impact**: Number of users affected, duration, revenue/data impact
+- **What Went Well**: Things that helped in detection or resolution
+- **What Went Wrong**: Gaps in process, tooling, or communication
+- **Action Items**: Concrete follow-ups with owners and deadlines to prevent recurrence
+
+### On-Call Expectations
+
+- Maintain a documented on-call rotation schedule
+- On-call engineers must acknowledge alerts within the defined response time
+- Provide runbooks for common failure scenarios to enable faster resolution
+- Review and update runbooks after every incident
+
+---
+
+## Compliance & Regulatory
+
+### Data Protection Regulations
+
+- Identify and comply with all applicable data protection laws (e.g., GDPR, CCPA, HIPAA, PDPA) based on user geography and data type
+- Maintain a Record of Processing Activities (ROPA) documenting what personal data is collected, why, and how it is processed
+- Implement lawful basis for data processing (consent, legitimate interest, contract, legal obligation)
+- Provide mechanisms for users to exercise their data subject rights: access, rectification, erasure, portability, and objection
+- Define and enforce data retention schedules — do not retain personal data longer than necessary
+
+### Consent & Privacy
+
+- Collect explicit, informed consent before processing personal data where required
+- Provide clear, accessible privacy notices that explain data collection and usage
+- Implement cookie consent management in compliance with applicable regulations
+- Allow users to withdraw consent as easily as they gave it
+- Conduct Data Protection Impact Assessments (DPIAs) for high-risk processing activities
+
+### Audit & Accountability
+
+- Maintain audit logs for all data access, modifications, and deletions involving sensitive or personal data
+- Ensure audit logs are tamper-proof and retained according to compliance requirements
+- Conduct periodic internal audits to verify compliance with policies and regulations
+- Designate a Data Protection Officer (DPO) or equivalent role if required by regulation
+- Document and regularly review data processing agreements with third-party vendors
+
+### Data Residency & Transfer
+
+- Store data in regions compliant with applicable data residency requirements
+- Use approved transfer mechanisms (e.g., Standard Contractual Clauses, adequacy decisions) for cross-border data transfers
+- Document and regularly review the geographic locations of all data storage and processing
+
+### Compliance Checklist
+
+- [ ] Applicable regulations identified and documented
+- [ ] Privacy notices and consent mechanisms implemented
+- [ ] Data subject rights request process established
+- [ ] Data retention schedules defined and enforced
+- [ ] Audit logging enabled for sensitive data operations
+- [ ] Third-party vendor data processing agreements in place
+- [ ] Data Protection Impact Assessments completed where required
+- [ ] Team trained on compliance requirements relevant to their role
 
 ---
 
