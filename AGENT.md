@@ -4,9 +4,34 @@
 
 This document provides guidelines for the entire team (Product Manager, Business Analyst, Developer, and QA) to collaborate effectively using AI assistance, similar to mob programming principles.
 
-
 ## General Principles
 
+### Team Collaboration
+- **Shared Ownership**: All team members are responsible for quality and project success
+- **Continuous Communication**: Maintain open channels between PM, BA, Dev, and QA
+- **Knowledge Sharing**: Document learnings and share AI-assisted solutions across the team
+- **Iterative Feedback**: Review AI outputs collectively to improve prompt strategies
+
+### AI Usage Guidelines
+- **Human-in-the-Loop**: AI assists, humans decide—always review and validate AI outputs
+- **Context is Key**: Provide detailed, specific context in prompts for better results
+- **Version Control**: Track AI-generated content alongside manual changes
+- **Confidentiality**: Never share sensitive data, credentials, or proprietary information with AI tools
+- **Bias Awareness**: Be mindful of potential biases in AI-generated content
+
+### Quality Standards
+- **Accuracy First**: Verify AI outputs against requirements and domain knowledge
+- **Consistency**: Use standardized prompts and templates across the team
+- **Traceability**: Document which outputs were AI-assisted for audit purposes
+- **Continuous Improvement**: Refine prompts based on output quality over time
+
+### Ethical Considerations
+- Respect intellectual property and licensing requirements
+- Ensure AI-generated content complies with organizational policies
+- Maintain transparency about AI usage with stakeholders when appropriate
+- Consider accessibility and inclusivity in all deliverables
+
+---
 
 ## Product Manager (PM) Instructions
 
@@ -89,7 +114,7 @@ This document provides guidelines for the entire team (Product Manager, Business
 
 ---
 
-## 💻 Developer (Dev) Instructions
+## Developer (Dev) Instructions
 
 ### Responsibilities
 - Code implementation
@@ -156,6 +181,49 @@ This document provides guidelines for the entire team (Product Manager, Business
 - Implementing test automation
 - Maintaining automation testcases
 
+### PII Data Sanitization Requirements
+Before releasing any data to QA environments, ensure all Personally Identifiable Information (PII) is sanitized:
+
+#### Data Types to Sanitize
+| PII Type | Sanitization Method | Example |
+|----------|---------------------|---------|
+| Full Names | Replace with synthetic names | John Doe → Test User 001 |
+| Email Addresses | Use fake domain | john@company.com → user001@test.local |
+| Phone Numbers | Replace with fake numbers | 555-123-4567 → 000-000-0001 |
+| SSN/National IDs | Mask or replace entirely | 123-45-6789 → XXX-XX-XXXX |
+| Credit Card Numbers | Use test card numbers | 4111-1111-1111-1111 |
+| Physical Addresses | Use generic addresses | 123 Test Street, Test City |
+| Date of Birth | Randomize or offset | Keep age range, change specific date |
+| IP Addresses | Anonymize | 192.168.x.x or 10.0.0.x ranges |
+| Bank Account Numbers | Replace with test values | Use fake account patterns |
+| Medical/Health Data | Remove or replace entirely | Use synthetic health records |
+
+#### Sanitization Checklist
+- [ ] Database exports are scrubbed before import to QA
+- [ ] Log files are reviewed and PII removed
+- [ ] Configuration files contain no production credentials
+- [ ] API responses use mock/synthetic data
+- [ ] Test data generators use faker libraries (not real data)
+- [ ] Screenshots/recordings are reviewed for visible PII
+- [ ] Third-party integrations point to sandbox environments
+
+#### AI-Assisted Sanitization
+```
+Prompt example: "Generate synthetic test data for [number] users with realistic but fake names, emails, and addresses"
+```
+```
+Prompt example: "Create a data masking script for [database type] that anonymizes [PII fields]"
+```
+
+#### Best Practices for PII Handling
+- ✅ Use data masking tools (e.g., Faker, Bogus, Mockaroo)
+- ✅ Automate sanitization as part of the release pipeline
+- ✅ Maintain referential integrity when anonymizing
+- ✅ Document which fields contain PII in data dictionaries
+- ❌ Never copy production data directly to QA without sanitization
+- ❌ Never use real customer data for testing
+- ❌ Never share unsanitized data via email or chat
+
 ### AI-Assisted Tasks
 1. **Test Case Generation**
    ```
@@ -204,3 +272,5 @@ This document provides guidelines for the entire team (Product Manager, Business
 - [ ] Performance tested (if applicable)
 - [ ] Security tested (if applicable)
 - [ ] Accessibility checked (if applicable)
+- [ ] PII data sanitized and verified before testing
+- [ ] No production credentials in test environment
