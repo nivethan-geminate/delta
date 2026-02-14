@@ -5,6 +5,10 @@
 This document provides guidelines for the entire team (Product Manager, Business Analyst, Developer, and QA) to collaborate effectively using AI assistance, similar to mob programming principles.
 
 ## General Principles
+- Following least privilege principle which mandates that users operate with the minimum set of permissions required to perform that task
+- Employ role based access control mechanisms
+- Design with concurrency in mind to avoid race conditions
+- Split backend and frontend into seperate folders
 
 ### Team Collaboration
 - **Shared Ownership**: All team members are responsible for quality and project success
@@ -121,12 +125,14 @@ This document provides guidelines for the entire team (Product Manager, Business
 - Technical architecture decisions
 - Code reviews
 - Technical documentation
+- Security risk assessment (Assess for security risks in code and architecture)
 
 ### AI-Assisted Tasks
 1. **Code Generation**
    ```
    Prompt example: "Implement [function/feature] in [language] following [pattern/standard]"
    ```
+
 
 2. **Code Review**
    ```
@@ -160,7 +166,65 @@ This document provides guidelines for the entire team (Product Manager, Business
 -  Verify security implications of AI suggestions
 -  Don't blindly copy-paste code without understanding
 -  Don't commit untested AI-generated code
--  Don't share proprietary code or sensitive data
+-  Don't share proprietary code or sensitive data with AI tools
+-  Avoid using obscure naming for functions, variables and data types
+-  Follow consistent naming conventions across codebase
+-  Comments should not be too lengthy, must explain only the context of the function
+-  Use a consistent coding style throughout the project
+-  Keep interfaces and type definitions simple and purpose-driven
+-  Structure project in a modular fashion, separating concerns by functionality
+
+### Design Principles
+-  Follow Single Responsibility Principle. Each service/module should handle only one core responsibility
+-  Avoid tight coupling. Services communicate through defined interfaces/APIs, not internal implementations
+-  Group endpoints in a clear hierarchical structure
+-  Use human-readable paths
+-  URLs should represent application state where possible (bookmarkable & shareable)
+-  Implement explicit API versioning
+-  For multi-server deployments, store sessions in shared storage (DB/cache/token) instead of server memory
+
+
+## Dependency Management 
+-  Do not use deprecated libraries and tools. Keep dependencies up to date 
+-  Use Dependabot to keep dependencies up to date
+-  Preplan runtime and development dependencies. Attempt to achieve a balance in both so that the application is not heavily overloaded
+-  Conduct proper research before incorporating a new dependency into the project
+-  Take necessary steps to avoid dependency hell 
+-  Ensure dependency versions are consistent across different environments (prod and dev)
+-  Use tools in CI/CD pipeline to flag dependency errors
+-  Ensure the development team is working with the same dependency versions 
+-  Use documentation to record dependency management policies
+
+
+### Security Considerations and Error Handling
+- Sanitize user inputs
+- Have a security specific checklist for security focused code reviews
+-  Errors should be handled with users receiving generic messages while detailed error logs should appear internally
+-  Error logs should not contain secure data such as passwords, session tokens
+-  Differentiate between expected and unexpected Errors
+-  Implement detailed and structured error logging and trace IDs
+-  Validate arithmetic inputs and outputs to avoid integer overflows
+-  Do not expose internal implementation details in URLs
+-  Validate all path/query parameters
+
+### CI/CD Best Practices
+-  Commit code in small, incremental changes to reduce merge conflicts and simplify rollbacks
+-  Use feature branches.Merge only after full testing and peer review
+-  Conduct integration testing to verify multiple modules work together
+-  Use automated security scanning for dependencies and code 
+-  Implement rollback strategies in case deployment introduces issues
+-  Keep environments consistent across development, staging, and production
+
+### Development Guardrails
+-  No direct database access outside repository layer
+-  Controllers must only validate input and call services
+-  Keep functions and methods small and focused (single responsibility)
+-  Avoid duplicate code.Create reusable utilities
+
+### Security Guardrails
+-  Store secrets, keys, and configuration variables in env files and they must not exist in source code.
+-  Authorization must be checked at service level
+-  File uploads must validate file type, size, and extension
 
 ### Code Quality Checklist
 - [ ] Code follows team standards and conventions
@@ -169,6 +233,7 @@ This document provides guidelines for the entire team (Product Manager, Business
 - [ ] Code is properly tested
 - [ ] Documentation is complete
 - [ ] Security considerations are 
+- [ ] Code is optimized for best performance
 
 
 ## Quality Assurance (QA) Instructions
