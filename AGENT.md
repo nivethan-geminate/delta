@@ -134,7 +134,8 @@ This document provides guidelines for the entire team (Product Manager, Business
 
 ### Security Guardrails
 
-- Store secrets, keys, and configuration variables in env files and they must not exist in source code.
+- Store secrets, keys, and configuration variables in .env files and they must not exist in source code only exception is .env.example.
+- .env.example should contain only dummy values.
 - Authorization must be checked at service level
 - File uploads must validate file type, size, and extension
 
