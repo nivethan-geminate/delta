@@ -324,6 +324,70 @@ This document provides guidelines for the entire team (Product Manager, Business
 - Don't accept AI-generated requirements without domain validation
 - Don't skip stakeholder review sessions
 
+### Don't Dos:
+#### Structural
+- Mix multiple requirements in one user story
+- Add new features beyond the provided idea
+- Expand scope unless explicitly instructed
+- Mix BRD, SOW, and technical design content
+- Write paragraphs without structured headings
+- Leave requirements unnumbered
+- Suggest architecture changes
+- Add integration assumptions
+- Use casual language, conversational filler or storytelling
+
+#### Content
+- Write vague requirements like "fast, secure, efficient, scalable, improve performance"
+- Write implementation details in requirements
+- Assume everyone understands technical context
+- Write technical implementation steps
+- Include database terms
+- Write subjective words such as, “fast”, “secure”, “user-friendly”, “robust”, “efficient”, “seamless”, “high performance”.
+- Use emotional language instead of business impact
+- Leave non-functional requirements undefined
+- Write BRD/SOW statements without measurable KPIs
+- Use “etc.” or “and more”
+- Say “system should comply with regulations” without specifying which regulation
+
+#### Banking And Finances
+- Assume "Delete" exists as in banking, records are never deleted; they are marked as inactive or reversed via a contra-entry
+- Write a time-based requirement without specifying the timezone
+- Use a generic number for financial values.
+- Assume a sensitive action (fund transfer, limit change) is performed by one person.
+
+### Do:
+#### Structural
+- Break content into structured sections
+- Separate Functional vs Non-Functional Requirements
+- Maintain traceability references
+- Use business language for stakeholders
+- Keep language formal and audit-ready
+- Always assign unique IDs to requirements and reference them in related documents.
+- Always map requirements with SOW document scope
+- MUST maintain Consistent terminology, Same naming conventions, Same ID structure, Same formatting, Same measurement units
+
+#### Content
+- Always follow the "As a [role], I want [action], So that [benefit]" format to create user stories.
+- Always provide measurable, testable acceptance criteria for each user story.
+- Quantify costs and benefits
+- One requirement per user story
+- Provide context and examples
+- Convert subjective words into measurable metrics,for example Instead of “improve performance” → “Reduce transaction processing time from 8 seconds to ≤ 2 seconds for 95% of transactions”
+- Highlight assumptions clearly
+- Mark out-of-scope items explicitly
+- Flag missing critical information instead of inventing it
+- If information is missing, state: “Assumption-01: [Description] — Requires stakeholder validation.”
+- always include: Failure handling scenario, Invalid input scenario, System downtime scenario, Unauthorized access scenario, Duplicate processing scenario (such as financial transactions)
+- Use shall/must for mandatory requirements
+- Use may for optional capabilities
+
+#### Banking And Finances
+- Specify the Currency Code (ISO 4217) and the Decimal Precision (e.g., 2 decimal places for USD, 0 for JPY).
+- Every sensitive action must have a "Maker" (Initiator) and a "Checker" (Approver)
+- For any UI-related user story involving PII (Personally Identifiable Information) or PCI (Payment Card Industry) data, specify masking requirements (e.g., "Display only last 4 digits of PAN").
+- Always specify the rounding convention (e.g., "Round half-up," "Floor," or "Ceiling") for interest or fee calculations.
+
+
 ---
 
 ## Developer (Dev) Instructions
