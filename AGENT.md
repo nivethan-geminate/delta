@@ -590,3 +590,73 @@ Prompt example: "Create a data masking script for [database type] that anonymize
 - [ ] Accessibility checked (if applicable)
 - [ ] PII data sanitized and verified before testing
 - [ ] No production credentials in test environment
+
+
+### Security & Compliance Focus
+
+-	Always prioritize data security and confidentiality in all generated code.
+-	Ensure compliance with banking regulations (e.g., KYC, AML, PCI-DSS where applicable).
+-	Never expose sensitive data such as account numbers, CVV, PIN, or OTP in logs.
+-	Mask sensitive fields in UI and API responses.
+-	Enforce strong password validation rules.
+-	Suggest multi-factor authentication (MFA) where authentication is involved.
+-	Validate role-based access control (RBAC) for all modules.
+-	Ensure proper session timeout and auto logout logic.
+-	Prevent SQL injection, XSS, CSRF, and other OWASP Top 10 vulnerabilities.
+-	Recommend encryption for data in transit (HTTPS/TLS) and at rest.
+
+
+### Functional Testing Perspective
+-	Validate all mandatory fields before submission.
+-	Ensure correct error messages for invalid inputs.
+-	Check boundary values for amount fields (min/max transaction limits).
+-	Validate correct currency formatting and rounding rules.
+-	Ensure correct transaction status updates (Pending, Success, Failed, Reversed).
+-	Validate duplicate transaction prevention logic.
+-	Ensure correct balance calculation after each transaction.
+-	Validate transaction history accuracy and sorting.
+-	Ensure proper validation for date formats.
+-	Validate business rules for interest, charges, and fees.
+
+
+### API Testing Focus
+-	Validate correct HTTP status codes.
+-	Ensure APIs return consistent and structured JSON responses.
+-	Validate error response structure and error codes.
+-	Ensure proper authentication tokens are required for secured APIs.
+-	Validate token expiration handling.
+-	Check rate limiting and throttling behavior.
+-	Ensure idempotency for critical APIs (e.g., fund transfer).
+-	Validate API response time within acceptable SLA.
+-	Ensure no sensitive information is exposed in API responses.
+-	Validate backward compatibility of APIs after changes.
+
+### Transaction & Payment Testing
+-	Ensure atomicity of transactions (no partial updates).
+-	Validate rollback mechanism on transaction failure.
+-	Ensure double debit does not occur.
+-	Validate concurrency handling for simultaneous transactions.
+-	Test transaction behavior during network interruption.
+-	Validate daily transfer limits enforcement.
+-	Validate scheduled/recurring transaction execution.
+-	Ensure accurate ledger updates.
+-	Validate notification triggers (SMS/Email) after transactions.
+-	Validate reversal and refund workflows.
+
+
+
+
+### Data Integrity & Accuracy
+-	Ensure database consistency after every transaction.
+-	Validate audit trail logging for critical actions.
+-	Ensure timestamp consistency (server time vs user time).
+-	Validate report generation accuracy.
+-	Ensure reconciliation data matches transaction records.
+
+### Performance & Reliability
+-	Validate system behavior under high load.
+-	Ensure graceful error handling during server downtime.
+-	Validate failover and backup mechanisms.
+-	Ensure system scalability considerations are followed.
+-	Validate performance benchmarks for peak banking hours.
+
